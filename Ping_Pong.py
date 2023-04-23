@@ -1,11 +1,12 @@
 from pygame import *
-
+font.init()
 clock = time.Clock()
 run = True
 mw = display.set_mode((1000,700))
 display.set_caption('Pong')
 background = transform.scale(image.load('fon.png'),(1280,720))
 
+font = font.SysFont(None, 50)
 class Bal(sprite.Sprite):
     def __init__(self,image_player,rect_x,rect_y,speed_y,speed_x):
         super().__init__()
@@ -45,7 +46,10 @@ class Paddle(sprite.Sprite):
 ball = Bal('ball.png',500,100,7,10)
 paddle1 = Paddle('platform.png',10,300,10)
 paddle2 = Paddle('platform.png',950,300,10)
+
 while run:
+    over1 = font.render('Игрок 1 Проиграл!',True,(255,0,0))
+    over2 = font.render('Игрок 2 Проиграл!',True,(255,0,0))
     mw.blit(background,(0,0))
     for e in event.get():
         if e.type == QUIT:
@@ -63,6 +67,12 @@ while run:
     if sprite.collide_rect(ball,paddle1) or sprite.collide_rect(ball,paddle2):
         ball.speed_x *= -1
     
+    if ball.rect.x <= 0:
+        mw.blit(over1,(500,500))
+        
+    if ball.rect.x >= 950:
+        mw.blit(over2,(500,500))
+    
     ball.reset()
     paddle1.reset()
     paddle2.reset()
@@ -70,3 +80,5 @@ while run:
     paddle2.update_H()
     display.update()
     clock.tick(60)
+
+    
